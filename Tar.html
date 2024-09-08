@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembayaran SPP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1, h3 {
+            text-align: center;
+            color: #333;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        
+        .form-group {
+            margin-bottom: 10px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .form-group input, .form-group div {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        
+        .buttons {
+            margin-top: 10px;
+        }
+        
+        .buttons button {
+            padding: 10px 20px;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Pembayaran SPP SMK KBXIRPL2</h1>
+        
+        <div id="userForm">
+            <h3>Pembayaran SPP</h3>
+            <div class="form-group">
+                <label for="nis">NIS:</label>
+                <input type="text" id="nis" placeholder="Masukkan NIS">
+            </div>
+            <div class="form-group">
+                <label for="name">Nama Siswa:</label>
+                <input type="text" id="name" placeholder="Masukkan nama siswa">
+            </div>
+            <div class="form-group">
+                <label for="kelas">Kelas:</label>
+                <input type="text" id="kelas" placeholder="Masukkan kelas">
+            </div>
+            <div class="form-group">
+                <label for="jurusan">Jurusan:</label>
+                <input type="text" id="jurusan" placeholder="Masukkan jurusan">
+            </div>
+            <div class="form-group">
+                <label for="gender">Jenis Kelamin:</label>
+                <div>
+                    <input type="radio" id="male" name="gender" value="Laki-laki">
+                    <label for="male">Laki-laki</label>
+                    <input type="radio" id="female" name="gender" value="Perempuan">
+                    <label for="female">Perempuan</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="totalPembayaran">Total Pembayaran:</label>
+                <input type="number" id="totalPembayaran" placeholder="Masukkan total pembayaran" step="0.01">
+            </div>
+            <div class="form-group">
+                <label for="jumlahDibayar">Jumlah yang Dibayarkan:</label>
+                <input type="number" id="jumlahDibayar" placeholder="Masukkan jumlah uang yang dibayarkan" step="0.01">
+            </div>
+            <div class="buttons">
+                <button onclick="addUser()">Tambahkan Pembayaran</button>
+                <button onclick="updateUser()" style="display:none;" id="updateBtn">Perbarui Pembayaran</button>
+            </div>
+        </div>
+        
+        <h3>Riwayat Pembayaran SPP</h3>
+        <table id="userTable">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>NIS</th>
+                    <th>Nama Siswa</th>
+                    <th>Kelas</th>
+                    <th>Jurusan</th>
+                    <th>Jenis Kelamin</th>
+                    <th>Total Pembayaran</th>
+                    <th>Kembalian</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dynamic content will be added here -->
+            </tbody>
+        </table>
+        
+        <h3>Laporan Pembayaran</h3>
+        <table id="reportTable">
+            <thead>
+                <tr>
+                    <th>Total Pembayaran</th>
+                    <th>Jumlah Siswa</th>
+                    <th>Jumlah Laki-laki</th>
+                    <th>Jumlah Perempuan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dynamic content will be added here -->
+            </tbody>
+        </table>
+        
+        <h3>Tagihan Belum Dibayar</h3>
+        <table id="unpaidTable">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>NIS</th>
+                    <th>Nama Siswa</th>
+                    <th>Kelas</th>
+                    <th>Jurusan</th>
+                    <th>Tagihan Belum Dibayar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dynamic content will be added here -->
+            </tbody>
+        </table>
+        
+        <h3>Riwayat Uang Pembayaran</h3>
+        <table id="paymentHistoryTable">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>NIS</th>
+                    <th>Nama Siswa</th>
+                    <th>Total Pembayaran</th>
+                    <th>Jumlah yang Dibayarkan</th>
+                    <th>Tanggal Pembayaran</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dynamic content will be added here -->
+            </tbody>
+        </table>
+        
+        <h3>Riwayat Edit Pembayaran</h3>
+        <table id="editHistoryTable">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>NIS</th>
+                    <th>Nama Siswa</th>
+                    <th>Total Pembayaran</th>
+                    <th>Jumlah yang Dibayarkan</th>
+                    <th>Tanggal Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dynamic content will be added here -->
+            </tbody>
+        </table>
+    </div>
+    
+    <script>
+        let users = [];
+        let paymentHistory = [];
+        let editHistory = [];
+        let editingIndex = -1;
+
+        function displayUsers() {
+            const userTableBody = document.querySelector("#userTable tbody");
+            userTableBody.innerHTML = "";
+
+            users.forEach((user, index) => {
+                const totalPembayaran = parseFloat(user.totalPembayaran);
+                const jumlahDibayar = parseFloat(user.jumlahDibayar) || 0;
+                const kembalian = jumlahDibayar - totalPembayaran;
+
+                // Define status based on the amount of pembayaran
+                let status;
+                if (jumlahDibayar < 250000) {
+                    status = "✘ (Tagih)"; // Cross and "Tagih" for below 250,000
+                } else if (jumlahDibayar === 250000) {
+                    status = "✔"; // Checkmark for exactly 250,000
+                } else if (jumlahDibayar > 250000) {
+                    status = "✔"; // Checkmark for more than 250,000
+                }
+
+                const row = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${user.nis}</td>
+                        <td>${user.name}</td>
+                        <td>${user.kelas}</td>
+                        <td>${user.jurusan}</td>
+                        <td>${user.gender}</td>
+                        <td>${totalPembayaran.toFixed(2)}</td>
+                        <td>${kembalian.toFixed(2)}</td>
+                        <td>${status}</td>
+                        <td>
+                            <button onclick="editUser(${index})">Edit</button>
+                            <button onclick="deleteUser(${index})">Delete</button>
+                        </td>
+                    </tr>
+                `;
+                userTableBody.innerHTML += row;
+            });
+            generateReports();
+            displayUnpaid();
+        }
+
+        function addUser() {
+            const nis = document.getElementById("nis").value;
+            const name = document.getElementById("name").value;
+            const kelas = document.getElementById("kelas").value;
+            const jurusan = document.getElementById("jurusan").value;
+            const genderElement = document.querySelector('input[name="gender"]:checked');
+            const gender = genderElement ? genderElement.value : null;
+            const totalPembayaran = parseFloat(document.getElementById("totalPembayaran").value);
+            const jumlahDibayar = parseFloat(document.getElementById("jumlahDibayar").value);
+            const date = new Date().toLocaleDateString();
+
+            if (nis && name && kelas && jurusan && totalPembayaran > 0 && jumlahDibayar >= 0 && gender) {
+                // Tambahkan pengguna baru ke dalam array users
+                users.push({ nis, name, kelas, jurusan, gender, totalPembayaran, jumlahDibayar });
+                
+                // Simpan data pembayaran ke dalam history
+                paymentHistory.push({ nis, name, totalPembayaran, jumlahDibayar, date });
+
+                // Tampilkan data pengguna dan riwayat
+                displayUsers();
+                displayPaymentHistory();
+                document.getElementById("userForm").reset(); // Reset form setelah penambahan
+            } else {
+                alert("Harap isi semua field dengan benar.");
+            }
+        }
+
+        function editUser(index) {
+            editingIndex = index;
+            const user = users[index];
+
+            document.getElementById("nis").value = user.nis;
+            document.getElementById("name").value = user.name;
+            document.getElementById("kelas").value = user.kelas;
+            document.getElementById("jurusan").value = user.jurusan;
+            document.querySelector(`input[name="gender"][value="${user.gender}"]`).checked = true;
+            document.getElementById("totalPembayaran").value = user.totalPembayaran;
+            document.getElementById("jumlahDibayar").value = user.jumlahDibayar;
+            document.getElementById("updateBtn").style.display = "block";
+        }
+
+        function updateUser() {
+            if (editingIndex !== -1) {
+                const nis = document.getElementById("nis").value;
+                const name = document.getElementById("name").value;
+                const kelas = document.getElementById("kelas").value;
+                const jurusan = document.getElementById("jurusan").value;
+                const genderElement = document.querySelector('input[name="gender"]:checked');
+                const gender = genderElement ? genderElement.value : null;
+                const totalPembayaran = parseFloat(document.getElementById("totalPembayaran").value);
+                const jumlahDibayar = parseFloat(document.getElementById("jumlahDibayar").value);
+                const date = new Date().toLocaleDateString();
+
+                if (nis && name && kelas && jurusan && totalPembayaran > 0 && jumlahDibayar >= 0 && gender) {
+                    // Menyimpan data sebelum edit ke dalam editHistory
+                    const editedUser = users[editingIndex];
+                    editHistory.push({
+                        nis: editedUser.nis,
+                        name: editedUser.name,
+                        totalPembayaran: editedUser.totalPembayaran,
+                        jumlahDibayar: editedUser.jumlahDibayar,
+                        date: date
+                    });
+
+                    // Melakukan update
+                    users[editingIndex] = { nis, name, kelas, jurusan, gender, totalPembayaran, jumlahDibayar };
+                    editingIndex = -1;
+                    document.getElementById("updateBtn").style.display = "none";
+                    displayUsers();
+                    displayEditHistory(); // Tampilkan riwayat edit setelah pembaruan
+                    document.getElementById("userForm").reset(); // Reset form setelah pembaruan
+                } else {
+                    alert("Harap isi semua field dengan benar.");
+                }
+            }
+        }
+
+        function deleteUser(index) {
+            if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
+                users.splice(index, 1);
+                displayUsers();
+            }
+        }
+
+        function displayPaymentHistory() {
+            const paymentHistoryTableBody = document.querySelector("#paymentHistoryTable tbody");
+            paymentHistoryTableBody.innerHTML = "";
+
+            paymentHistory.forEach((payment, index) => {
+                const row = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${payment.nis}</td>
+                        <td>${payment.name}</td>
+                        <td>${payment.totalPembayaran.toFixed(2)}</td>
+                        <td>${payment.jumlahDibayar.toFixed(2)}</td>
+                        <td>${payment.date}</td>
+                    </tr>
+                `;
+                paymentHistoryTableBody.innerHTML += row;
+            });
+        }
+
+        function displayEditHistory() {
+            const editHistoryTableBody = document.querySelector("#editHistoryTable tbody");
+            editHistoryTableBody.innerHTML = "";
+
+            editHistory.forEach((edit, index) => {
+                const row = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${edit.nis}</td>
+                        <td>${edit.name}</td>
+                        <td>${edit.totalPembayaran.toFixed(2)}</td>
+                        <td>${edit.jumlahDibayar.toFixed(2)}</td>
+                        <td>${edit.date}</td>
+                    </tr>
+                `;
+                editHistoryTableBody.innerHTML += row;
+            });
+        }
+
+        function generateReports() {
+            const reportTableBody = document.querySelector("#reportTable tbody");
+            reportTableBody.innerHTML = "";
+
+            let totalPembayaran = 0;
+            let jumlahSiswa = users.length;
+            let jumlahLakiLaki = users.filter(user => user.gender === 'Laki-laki').length;
+            let jumlahPerempuan = users.filter(user => user.gender === 'Perempuan').length;
+
+            users.forEach(user => {
+                totalPembayaran += user.totalPembayaran;
+            });
+
+            const row = `
+                <tr>
+                    <td>${totalPembayaran.toFixed(2)}</td>
+                    <td>${jumlahSiswa}</td>
+                    <td>${jumlahLakiLaki}</td>
+                    <td>${jumlahPerempuan}</td>
+                </tr>
+            `;
+            reportTableBody.innerHTML += row;
+        }
+
+        function displayUnpaid() {
+            const unpaidTableBody = document.querySelector("#unpaidTable tbody");
+            unpaidTableBody.innerHTML = "";
+
+            users.forEach((user, index) => {
+                const totalPembayaran = parseFloat(user.totalPembayaran);
+                const jumlahDibayar = parseFloat(user.jumlahDibayar) || 0;
+                const tagihanBelumDibayar = totalPembayaran - jumlahDibayar;
+
+                // Define status for unpaid
+                let status = "Lunas";
+                if (tagihanBelumDibayar > 0) {
+                    if (jumlahDibayar < 250000) {
+                        status = "Tagih";
+                    } else {
+                        status = "Lunas (Kekurangan)";
+                    }
+                }
+
+                if (tagihanBelumDibayar > 0) {
+                    const row = `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${user.nis}</td>
+                            <td>${user.name}</td>
+                            <td>${user.kelas}</td>
+                            <td>${user.jurusan}</td>
+                            <td>${tagihanBelumDibayar.toFixed(2)} (${status})</td>
+                        </tr>
+                    `;
+                    unpaidTableBody.innerHTML += row;
+                }
+            });
+        }
+    </script>
+</body>
+</html>
